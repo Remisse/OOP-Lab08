@@ -1,5 +1,18 @@
 package it.unibo.oop.lab.mvcio2;
 
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.io.File;
+
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+
+import it.unibo.oop.lab.mvcio.Controller;
+import it.unibo.oop.lab.mvcio.SimpleGUI;
+
 /**
  * A very simple program using a graphical interface.
  * 
@@ -32,4 +45,37 @@ public final class SimpleGUIWithFileChooser {
      * try to keep things separated.
      */
 
+    private final SimpleGUI gui;
+
+    public SimpleGUIWithFileChooser() {
+        this.gui = new SimpleGUI();
+        final Container mainPanel = this.gui.getFrame().getContentPane();
+        final Controller contr = this.gui.getController();
+        final JPanel nPanel = new JPanel(new BorderLayout());
+        final JTextField text1 = new JTextField();
+        text1.setEditable(false);
+        text1.setText(contr.getPathOfCurrentFile());
+        nPanel.add(text1);
+        final JButton bBrowse = new JButton("Browse...");
+        nPanel.add(bBrowse, BorderLayout.LINE_END);
+        mainPanel.add(nPanel, BorderLayout.NORTH);
+        /*
+         * Events
+         */
+        final JFileChooser chooser = new JFileChooser();
+        chooser.addActionListener(l -> {
+            final File chosenFile = chooser.getSelectedFile();
+            if (chosenFile != null && !chosenFile.getAbsolutePath().equals(text1.getText())) {
+                text1.setText(chosenFile.getAbsolutePath());
+            }
+        });
+        bBrowse.addActionListener(l -> {
+            final int result = chooser.showOpenDialog(this.gui.getFrame());
+            if (result == JFileChooser.APPROVE_OPTION) {
+                contr.setCurrentFile(chooser.getSelectedFile());
+            } else if (result != JFileChooser.CANCEL_OPTION) {
+                JOptionPane.showMessageDialog(this.gui.getFrame(), "An error has occurred.");
+            }
+        });
+    }
 }

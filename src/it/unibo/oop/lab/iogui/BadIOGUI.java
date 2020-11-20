@@ -6,9 +6,14 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
+import java.nio.file.Paths;
 import java.util.Random;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -24,6 +29,7 @@ import javax.swing.JPanel;
 public class BadIOGUI {
 
     private static final String TITLE = "A very simple GUI application";
+    private static final String ERROR_TITLE = "Error";
     private static final String PATH = System.getProperty("user.home")
             + System.getProperty("file.separator")
             + BadIOGUI.class.getSimpleName() + ".txt";
@@ -38,14 +44,24 @@ public class BadIOGUI {
         final JPanel canvas = new JPanel();
         canvas.setLayout(new BorderLayout());
         final JButton write = new JButton("Write on file");
-        canvas.add(write, BorderLayout.CENTER);
         frame.setContentPane(canvas);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        /*
+         * Ex 02.01
+         */
+        final JPanel canvasBoxed = new JPanel();
+        canvasBoxed.setLayout(new BoxLayout(canvasBoxed, BoxLayout.LINE_AXIS));
+        canvas.add(canvasBoxed, BorderLayout.CENTER);
+        canvasBoxed.add(write);
+        /*
+         * Ex 02.02
+         */
+        final JButton read = new JButton("Read from file");
+        canvasBoxed.add(read);
         /*
          * Handlers
          */
         write.addActionListener(new ActionListener() {
-            @Override
             public void actionPerformed(final ActionEvent e) {
                 /*
                  * This would be VERY BAD in a real application.
@@ -57,8 +73,27 @@ public class BadIOGUI {
                 try (PrintStream ps = new PrintStream(PATH)) {
                     ps.print(rng.nextInt());
                 } catch (FileNotFoundException e1) {
-                    JOptionPane.showMessageDialog(frame, e1, "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(frame, e1, ERROR_TITLE, JOptionPane.ERROR_MESSAGE);
                     e1.printStackTrace();
+                } catch (InvalidPathException e2) {
+                    JOptionPane.showMessageDialog(frame, "Invalid path name!", ERROR_TITLE, JOptionPane.ERROR_MESSAGE);
+                    e2.printStackTrace();
+                }
+            }
+        });
+        /*
+         * Ex 02.02-03
+         */
+        read.addActionListener(new ActionListener() {
+            public void actionPerformed(final ActionEvent e) {
+                try {
+                    System.out.println(Files.readAllLines(Paths.get(PATH)));
+                } catch (IOException e1) {
+                    JOptionPane.showMessageDialog(frame, e1, ERROR_TITLE, JOptionPane.ERROR_MESSAGE);
+                    e1.printStackTrace();
+                } catch (InvalidPathException e2) {
+                    JOptionPane.showMessageDialog(frame, "Invalid path name!", ERROR_TITLE, JOptionPane.ERROR_MESSAGE);
+                    e2.printStackTrace();
                 }
             }
         });
@@ -83,6 +118,10 @@ public class BadIOGUI {
          * on screen. Results may vary, but it is generally the best choice.
          */
         frame.setLocationByPlatform(true);
+        /*
+         * Resizing the frame to make it as small as possible, but still usable.
+         */
+        frame.pack();
         /*
          * OK, ready to pull the frame onscreen
          */

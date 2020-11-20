@@ -14,6 +14,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
+import it.unibo.oop.lab.mvcio2.SimpleGUIWithFileChooser;
+
 /**
  * A very simple program using a graphical interface.
  * 
@@ -42,6 +44,15 @@ public final class SimpleGUI {
      * 
      * Use "ex02.png" (in the res directory) to verify the expected aspect.
      */
+
+    public JFrame getFrame() {
+        return frame;
+    }
+
+    public Controller getController() {
+        return controller;
+    }
+
     private void arrangeComponents() {
         final JPanel mainPanel = new JPanel(new BorderLayout());
         final JTextArea textArea = new JTextArea();
@@ -108,8 +119,8 @@ public final class SimpleGUI {
          * Will exit without confirmation from the user.
          */
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        /*
-         * "Activates" the application window.
+        /**
+         * Displays the application window.
          */
         this.frame.setVisible(true);
     }

@@ -14,8 +14,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
-import it.unibo.oop.lab.mvcio2.SimpleGUIWithFileChooser;
-
 /**
  * A very simple program using a graphical interface.
  * 

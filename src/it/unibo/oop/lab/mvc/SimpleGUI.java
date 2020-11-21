@@ -19,7 +19,7 @@ import javax.swing.JTextField;
 public final class SimpleGUI {
 
     private final JFrame frame = new JFrame();
-    private final Controller controller = new ControllerImpl();
+    private final Controller controller;
 
     /*
      * Once the Controller is done, implement this class in such a way that:
@@ -85,9 +85,12 @@ public final class SimpleGUI {
     }
 
     /**
-     * builds a new {@link SimpleGUI}.
+     * Builds a new {@link SimpleGUI}.
+     * 
+     * @param contr
+     *              {@link Controller} for the GUI.
      */
-    public SimpleGUI() {
+    public SimpleGUI(final Controller contr) {
 
         /*
          * Make the frame half the resolution of the screen. This very method is
@@ -112,6 +115,11 @@ public final class SimpleGUI {
         this.frame.setLocationByPlatform(true);
 
         /*
+         * Assigning the controller passed on as argument.
+         */
+        this.controller = contr;
+
+        /*
          * Lays out the various components as per instructions.
          */
         this.arrangeComponents();
@@ -120,6 +128,6 @@ public final class SimpleGUI {
     }
 
     public static void main(final String... args) {
-        new SimpleGUI();
+        new SimpleGUI(new ControllerImpl());
     }
 }

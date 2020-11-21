@@ -2,7 +2,6 @@ package it.unibo.oop.lab.mvcio2;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
-import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;

@@ -74,7 +74,6 @@ public final class DrawNumberViewImpl implements DrawNumberView {
         frame.setLocationByPlatform(true);
     }
 
-    @Override
     public void start() {
         this.frame.setVisible(true);
     }
@@ -84,18 +83,15 @@ public final class DrawNumberViewImpl implements DrawNumberView {
                 JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
     }
 
-    @Override
     public void setObserver(final DrawNumberViewObserver observer) {
         this.observer = observer;
     }
 
-    @Override
     public void numberIncorrect() {
         JOptionPane.showMessageDialog(frame, "Incorrect Number.. try again", "Incorrect Number",
                 JOptionPane.ERROR_MESSAGE);
     }
 
-    @Override
     public void result(final DrawResult res) {
         switch (res) {
         case YOURS_HIGH:
@@ -111,12 +107,15 @@ public final class DrawNumberViewImpl implements DrawNumberView {
         observer.resetGame();
     }
 
-    @Override
     public void limitsReached() {
-        JOptionPane.showMessageDialog(frame, "You lost" + NEW_GAME, "Lost", JOptionPane.WARNING_MESSAGE);
+        JOptionPane.showMessageDialog(this.frame, "You lost" + NEW_GAME, "Lost", JOptionPane.WARNING_MESSAGE);
     }
 
     private void plainMessage(final String msg) {
-        JOptionPane.showMessageDialog(frame, msg, "Result", JOptionPane.PLAIN_MESSAGE);
+        JOptionPane.showMessageDialog(this.frame, msg, "Result", JOptionPane.PLAIN_MESSAGE);
+    }
+
+    public void displayError(final String message) {
+        JOptionPane.showMessageDialog(this.frame, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
 }

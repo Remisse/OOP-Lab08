@@ -62,20 +62,19 @@ public final class SimpleGUIWithFileChooser {
         /*
          * Events
          */
-        final JFileChooser chooser = new JFileChooser();
-        chooser.addActionListener(l -> {
-            final File chosenFile = chooser.getSelectedFile();
-            if (chosenFile != null && !chosenFile.getAbsolutePath().equals(text1.getText())) {
-                text1.setText(chosenFile.getAbsolutePath());
-            }
-        });
         bBrowse.addActionListener(l -> {
+            final JFileChooser chooser = new JFileChooser();
             final int result = chooser.showOpenDialog(this.gui.getFrame());
             if (result == JFileChooser.APPROVE_OPTION) {
                 contr.setCurrentFile(chooser.getSelectedFile());
+                text1.setText(chooser.getSelectedFile().getAbsolutePath());
             } else if (result != JFileChooser.CANCEL_OPTION) {
                 JOptionPane.showMessageDialog(this.gui.getFrame(), "An error has occurred.");
             }
         });
+    }
+
+    public static void main(final String... args) {
+        new SimpleGUIWithFileChooser();
     }
 }

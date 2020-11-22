@@ -1,14 +1,6 @@
 package it.unibo.oop.lab.advanced;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Map;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-
-import static java.util.Map.entry;
+import static it.unibo.oop.lab.advanced.Settings.*;
 
 /**
  */
@@ -21,50 +13,13 @@ public final class DrawNumberApp implements DrawNumberViewObserver {
      * 
      */
     public DrawNumberApp() {
-        final var config = ConfigUtilities.readSettings();
-        this.model = new DrawNumberImpl(config.get("minimum"), config.get("maximum"), config.get("attempts"));
+        final var config = ConfigUtils.readSettings();
+        this.model = new DrawNumberImpl(config.getOrDefault(MINIMUM, MINIMUM.getDefaultValue()),
+                                        config.getOrDefault(MAXIMUM, MAXIMUM.getDefaultValue()),
+                                        config.getOrDefault(ATTEMPTS, ATTEMPTS.getDefaultValue()));
         this.view = new DrawNumberViewImpl();
         this.view.setObserver(this);
         this.view.start();
-    }
-
-    private static class ConfigUtilities {
-
-        private static final String SEP = System.getProperty("file.separator");
-        private static final Path CONFIG_PATH = Paths.get("res" + SEP + "config.yml");
-        private static final Map<String, Integer> DEFAULT_CONF = Map.ofEntries(entry("minimum", 10),
-                                                                               entry("maximum", 60),
-                                                                               entry("attempts", 5));
-
-        private static String getDefaultConfigString() {
-            return DEFAULT_CONF.entrySet().stream()
-                                          .map(entry -> entry.getKey() + ": " + entry.getValue())
-                                          .collect(Collectors.joining(","));
-        }
-
-        private static Map<String, Integer> doYAMLToMap() {
-            String settings;
-            try {
-                settings = Files.lines(CONFIG_PATH)
-                                .collect(Collectors.joining(","));
-            } catch (IOException e) {
-                System.err.println("Config file inaccessible. Reverting to default settings.");
-                settings = getDefaultConfigString();
-            }
-            return Pattern.compile(",")
-                          .splitAsStream(settings)
-                          .map(s -> s.split(":"))
-                          .collect(Collectors.toMap(s -> s[0].trim(),
-                                                    s -> Integer.valueOf(s[1].trim())));
-        }
-
-        /*
-         * TODO: Check whether the map contains an entry for each setting.
-         * For each missing setting, use the default values stored in DEFAULT_CONF.
-         */
-        private static Map<String, Integer> readSettings() {
-            return doYAMLToMap();
-        }
     }
 
     public void newAttempt(final int n) {

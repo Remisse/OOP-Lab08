@@ -45,9 +45,10 @@ public final class ConfigUtils {
         }
         return Pattern.compile(",")
                       .splitAsStream(savedConf)
+                      .map(s -> s.replace("\s", ""))
                       .map(s -> s.split(":"))
-                      .collect(Collectors.toMap(s -> Settings.of(s[0].trim()),
-                                                s -> Integer.valueOf(s[1].trim()),
+                      .collect(Collectors.toMap(s -> Settings.of(s[0]),
+                                                s -> Integer.valueOf(s[1]),
                                                 (x, y) -> y,
                                                 () -> new EnumMap<>(Settings.class)));
     }
